@@ -1,4 +1,6 @@
 import os
+from tema import file_type
+import xml.etree.ElementTree as ET
 
 
 class GenericFile:
@@ -12,8 +14,9 @@ class GenericFile:
 
 class TextASCII(GenericFile):
 
-    path_absolut = ""
-    frecvente = ""
+    def __init__(self, path_absolut, frecvente):
+        self.path_absolut = path_absolut
+        self.frecvente = frecvente
 
     def get_path(self):
         return self.path_absolut
@@ -24,8 +27,9 @@ class TextASCII(GenericFile):
 
 class TextUNICODE(GenericFile):
 
-    path_absolut = ""
-    frecvente = ""
+    def __init__(self, path_absolut, frecvente):
+        self.path_absolut = path_absolut
+        self.frecvente = frecvente
 
     def get_path(self):
         return self.path_absolut
@@ -36,8 +40,9 @@ class TextUNICODE(GenericFile):
 
 class Binary(GenericFile):
 
-    path_absolut = ""
-    frecvente = ""
+    def __init__(self, path_absolut, frecvente):
+        self.path_absolut = path_absolut
+        self.frecvente = frecvente
 
     def get_path(self):
         return self.path_absolut
@@ -51,10 +56,13 @@ class XMLFile(TextASCII):
     first_tag = ""
 
     def get_first_tag(self):
+        tree = ET.parse(self.path_absolut)
+        root = tree.getroot()
+        self.first_tag = root.tag
         return self.first_tag
 
 
-class f(Binary):
+class BMP(Binary):
 
     width = 0
     height = 0
@@ -69,12 +77,23 @@ if __name__ == '__main__':
     for root, subdirs, files in os.walk(ROOT_DIR):
         for file in os.listdir(root):
             file_path = os.path.join(root, file)
-            print(file_path)
             if os.path.isfile(file_path):
                 # deschide fișierul spre acces binar
                 f = open(file_path, 'rb')
                 try:
                     # în content se va depune o listă de octeți
                     content = f.read()
+                    tip, freq = file_type(content)
+                    if tip == "ASCII":
+                       if content[:1].decode('utf-8') == '<':
+                           xml = XMLFile(file_path, freq)
+                           print(xml.get_path(), xml.get_first_tag())
+                    elif tip == "UNICODE":
+                        uni = TextUNICODE(file_path, freq)
+                        print(f"Fisierul UNICODE: {uni.get_path}")
+                    elif tip == "BINARY":
+                        pass
+                    else:
+                        raise Exception("Tip nerecunoscut")
                 finally:
                     f.close()
