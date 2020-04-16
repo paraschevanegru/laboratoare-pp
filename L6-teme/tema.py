@@ -10,7 +10,6 @@ def file_type(content):
 
     # for line in fileContent:
     for char in content:
-      # print(char)
         if char == 0:
             frequency_list[0] += 1
         elif (char in [9, 10, 13]) or (32 <= char <= 127):
@@ -28,13 +27,15 @@ def file_type(content):
         y = 0
     else:
         y = (100 * frequency_list[1]) / total_char
-
+    tip = ""
     if x < y:
-        return print("ASCII")
+        tip = "ASCII"
     elif 3 / 10 * total_char <= frequency_list[0]:
-        return print("UNICODE")
+        tip = "UNICODE"
     else:
-      print("BINARY")
+      tip = "BINARY"
+    
+    return tip, frequency_list
 
 
 if __name__ == '__main__':
@@ -42,13 +43,15 @@ if __name__ == '__main__':
     for root, subdirs, files in os.walk(ROOT_DIR):
         for file in os.listdir(root):
             file_path = os.path.join(root, file)
-            print(file_path)
             if os.path.isfile(file_path):
                 # deschide fișierul spre acces binar
                 f = open(file_path, 'rb')
                 try:
                     # în content se va depune o listă de octeți
                     content = f.read()
-                    file_type(content)
+                    # semnifactia "_" este de a ignora acel elem de la return
+                    tip, _ = file_type(content)
+                    # folosim f-string
+                    print(f"Fisierul {file_path} este de tipul: {tip}")
                 finally:
                     f.close()
