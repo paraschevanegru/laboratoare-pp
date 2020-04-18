@@ -87,12 +87,13 @@ if __name__ == '__main__':
                     if tip == "ASCII":
                        if content[:1].decode('utf-8') == '<':
                            xml = XMLFile(file_path, freq)
-                           print(xml.get_path(), xml.get_first_tag())
+                           print(f"Fisierul XML: {xml.get_path()}")
                     elif tip == "UNICODE":
                         uni = TextUNICODE(file_path, freq)
                         print(f"Fisierul UNICODE: {uni.get_path}")
                     elif tip == "BINARY":
-                        pass
+                        bmp = BMP(file_path, freq)
+                        print(f"Fisierul BMP: {bmp.get_path}")
                     else:
                         raise Exception("Tip nerecunoscut")
                 finally:
