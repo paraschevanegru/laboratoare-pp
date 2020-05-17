@@ -47,10 +47,10 @@ class KotlinHandler(AbstractHandler):
         comp = (freq[0] * len(self.exp)) / 100
         if shebang in self.shebang:
             print("kotlin")
-            subprocess.Popen(f'mv {file_path} {file_path}.kt; kotlinc kotfile.kt -include-runtime -d kotfile.jar  {file_path}.; java kotfile.jar', shell=True)
+            subprocess.Popen(f'cp {file_path} {file_path}.kt; kotlinc kotfile.kt -include-runtime -d kotfile.jar; java kotfile.jar', shell=True)
         elif comp >= 0.5:
             print("kotlin")
-            subprocess.Popen(f'mv {file_path} {file_path}.kt; kotlinc kotfile.kt -include-runtime -d kotfile.jar  {file_path}.; java kotfile.jar', shell=True)
+            subprocess.Popen(f'cp {file_path} {file_path}.kt; kotlinc kotfile.kt -include-runtime -d kotfile.jar; java kotfile.jar', shell=True)
         else:
             return super().handle(request)
 
